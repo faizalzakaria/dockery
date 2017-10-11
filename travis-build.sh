@@ -36,4 +36,19 @@ if [ -n "${MY_RUBY_VERSION}" ]; then
   docker-compose run ruby rails db:setup
 
   docker-compose down -v
+
+  docker-compose run ruby find . -delete
+
+  sed -i -- "s/RUBY_DB_ADAPTER=.*/RUBY_DB_ADAPTER=mysql2/g" .env
+  sed -i -- "s/RUBY_DB_HOST=.*/RUBY_DB_HOST=mysql/g" .env
+  sed -i -- "s/RUBY_DB_PORT=.*/RUBY_DB_PORT=3306/g" .env
+  docker-compose run ruby rails-new mysql
+  docker-compose up -d ruby mysql
+  docker-compose run ruby env
+  echo $DB_PASSWORD | docker-compose run ruby mysql -u $DB_USER -h mysql -p
+  docker-compose run ruby rails db:create
+  docker-compose run ruby rails db:migrate
+  docker-compose run ruby rails db:setup
+
+  docker-compose down -v
 fi
