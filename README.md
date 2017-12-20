@@ -5,6 +5,7 @@ Docker for Ruby. Docker Containers for Ruby Development Enviroment. It is heavil
 
 * [Setup Guide](#setup-guide)
 	* [Files and Folders](#files-and-folders)
+	* [Prerequisites](#prerequisites)
 	* [Create a Project](#create-a-project)
 	* [Mac-Specific Setup](#mac-specific-setup)
 	* [Run Rails App](#run-rails-app)
@@ -46,13 +47,24 @@ because for Mac, it requires performance boost with Docker Sync. Refer to
 `docker-compose.linux.yml` or `docker-compose.mac.yml` to `docker-compose.override.yml`
 in order to get your `ruby` workspace volumes mapped to your host machine.
 
+<a name="prerequisites"></a>
+### Prerequisites
+
+- Create `dockery` folder.
+
+```bash
+mkdir -p ~/.dockery/data/bundle/2.4.2
+```
+
+Change the ruby version of `2.4.2` to the version that you set in the `.env` file.
+
 <a name="create-a-project"></a>
 ### Create a Project
 
-Create `.env` file by copying from `.env.example`
+Create `.env` file by copying from `env.example`
 
 ```
-cp .env.example .env
+cp env.example .env
 ```
 
 Set the application folder name that you wish to run. For example, if you wish
@@ -88,15 +100,20 @@ Refer to this Docker Sync [commands wiki](https://github.com/EugenMayer/docker-s
 
 `docker-compose.mac.yml` is the override file which overrides the volumes
 configurations from `docker-compose.yml` to Docker Sync managed volumes.
-There are 2 ways to use this override file.
 
-First option is to use `docker-compose -f` flag as shown below:
+**There are 2 ways to use this override file.**
+
+- #### 1st option
+
+> First option is to use `docker-compose -f` flag as shown below:
 
 ```
 docker-compose up -d -f docker-compose.yml -f docker-compose.mac.yml ruby
 ```
 
-Second option, is to copy `docker-compose.mac.yml` to `docker-compose.override.yml`.
+- #### 2nd option
+
+> Second option, is to copy `docker-compose.mac.yml` to `docker-compose.override.yml`.
 `docker-compose` by default will read both `docker-compose.yml` as default
 and `docker-compose.override.yml` as override configurations.
 
@@ -105,6 +122,7 @@ cp docker-compose.mac.yml docker-compose.override.yml
 
 docker-compose up -d ruby
 ```
+
 
 Each time you change an entry that related to your project path, you will need
 to run `./resync.sh` to resync your project folder.
